@@ -28,6 +28,7 @@ import (
 	"github.com/vmware/govmomi/vim25/mo"
 	"github.com/vmware/govmomi/vim25/types"
 
+	"github.com/gdexlab/go-render/render"
 	infrav1 "sigs.k8s.io/cluster-api-provider-vsphere/api/v1alpha4"
 	"sigs.k8s.io/cluster-api-provider-vsphere/pkg/context"
 	"sigs.k8s.io/cluster-api-provider-vsphere/pkg/services/govmomi/extra"
@@ -121,6 +122,12 @@ func Clone(ctx *context.VMContext, bootstrapData []byte) error {
 	devices, err := tpl.Device(ctx)
 	if err != nil {
 		return errors.Wrapf(err, "error getting devices for %q", ctx)
+	}
+
+	// Debug
+	ctx.Logger.Info("Devices info:")
+	for _, device := range devices {
+		ctx.Logger.Info(render.Render(device))
 	}
 
 	// Create a new list of device specs for cloning the VM.
