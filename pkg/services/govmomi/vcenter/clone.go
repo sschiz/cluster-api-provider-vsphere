@@ -21,6 +21,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/gdexlab/go-render/render"
 	"github.com/pkg/errors"
 	"github.com/vmware/govmomi/object"
 	"github.com/vmware/govmomi/pbm"
@@ -121,6 +122,12 @@ func Clone(ctx *context.VMContext, bootstrapData []byte) error {
 	devices, err := tpl.Device(ctx)
 	if err != nil {
 		return errors.Wrapf(err, "error getting devices for %q", ctx)
+	}
+
+	// Debug
+	ctx.Logger.Info("Devices info:")
+	for _, device := range devices {
+		ctx.Logger.Info(render.Render(device))
 	}
 
 	// Create a new list of device specs for cloning the VM.
